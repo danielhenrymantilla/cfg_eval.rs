@@ -22,4 +22,16 @@ fn main()
         #[cfg(any())]
         NonExistingVariant,
     }
+
+    #[cfg_eval]
+    #[apply(debugger)]
+    const _: () = {
+        enum _WithoutCfgEval {
+            #[cfg(any())]
+            NonExistingVariant,
+        }
+        #[cfg(all())] #[cfg_attr(all(), foo)] fn foo() {}
+        #[cfg(all())] { 42 }
+        #[cfg(any())] { 27 }
+    };
 }

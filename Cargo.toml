@@ -7,7 +7,7 @@ name = "cfg_eval"
 authors = [
     "Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>",
 ]
-version = "0.1.0"
+version = "0.1.2"
 edition = "2021"
 rust-version = "1.61.0"
 
@@ -31,10 +31,13 @@ docs-rs = [
     "better-docs",
 ]
 
+# Support for any kind of item, not only derive inputs.
+items = []
+
 [dependencies]
 proc-macro2.version = "1.0.0"
 quote.version = "1.0.0"
-syn.version = "=2.0.0"
+syn.version = "2.0.0"
 syn.default-features = false
 syn.features = [
     "parsing",
@@ -44,6 +47,8 @@ syn.features = [
 
 [dev-dependencies]
 macro_rules_attribute.version = "0.2.0"
+cfg_eval.path = "."
+cfg_eval.features = ["items"]
 
 [workspace]
 

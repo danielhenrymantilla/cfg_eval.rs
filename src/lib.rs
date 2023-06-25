@@ -32,8 +32,10 @@ use ::syn::{*,
 /// https://doc.rust-lang.org/1.70.0/core/prelude/v1/attr.cfg_eval.html)
 /// in stable Rust.
 ///
-///   - Note: this macro only works on `struct`, `enum`, and `union`
-///     definitions (_i.e._, on `#[derive]` input).
+///   - Note: this macro, by default, only works on `struct`, `enum`, and
+///     `union` definitions (_i.e._, on `#[derive]` input).
+///
+///     Enable `features = ["items"]` to get support for arbitary items.
 ///
 /// ## Example
 ///
@@ -333,11 +335,22 @@ fn cfg_eval_impl(
         ),
     ));
 
-    Ok(quote_spanned!(span=>
+    let attrs_to_add = quote_spanned!(span=>
         #[::core::prelude::v1::derive(
             #krate::ඞRemoveExterminate
         )]
         #[#krate::ඞdalek_exterminate]
+    );
+
+    if cfg!(feature = "items") {
+        return Ok(quote_spanned!(Span::mixed_site()=>
+            #attrs_to_add
+            enum ඞ { ඞ = { #input } }
+        ));
+    }
+
+    Ok(quote_spanned!(Span::mixed_site()=>
+        #attrs_to_add
         #input
     ))
 }
@@ -347,8 +360,39 @@ fn cfg_eval_impl(
 fn __(input: TokenStream)
   -> TokenStream
 {
-    // The only thing left for us to do is removing the `#` and `[ …exterminate ]`
-    input.into_iter().skip(2).collect()
+    if cfg!(not(feature = "items")) {
+        // The only thing left for us to do is removing the
+        // `#` and `[ …exterminate ]`
+        return input.into_iter().skip(2).collect();
+    }
+
+    // From:
+    // ```rs
+    // #[…exterminate]
+    // enum ඞ {
+    //     ඞ = { #input }
+    // }
+    // ```
+    // to:
+    // ```rs
+    // #input
+    // ```
+    let mut tts = input.into_iter();
+
+    // Remove `#[…] enum ඞ`
+    tts.by_ref().take(4).for_each(drop);
+    // Remove the `{}` in `{ ඞ = … }`
+    if let Some(::proc_macro::TokenTree::Group(g)) = tts.next() {
+        tts = g.stream().into_iter();
+    }
+    // Remove `ඞ =`
+    tts.by_ref().take(2).for_each(drop);
+    // Remove the `{}` in `{ #input }`
+    if let Some(::proc_macro::TokenTree::Group(g)) = tts.next() {
+        tts = g.stream().into_iter();
+    }
+
+    tts.collect()
 }
 
 #[doc(hidden)] /** Not part of the public API */

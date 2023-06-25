@@ -31,6 +31,9 @@ docs-rs = [
     "better-docs",
 ]
 
+# Support for any kind of item, not only derive inputs.
+items = []
+
 [dependencies]
 proc-macro2.version = "1.0.0"
 quote.version = "1.0.0"
@@ -44,6 +47,8 @@ syn.features = [
 
 [dev-dependencies]
 macro_rules_attribute.version = "0.2.0"
+cfg_eval.path = "."
+cfg_eval.features = ["items"]
 
 [workspace]
 

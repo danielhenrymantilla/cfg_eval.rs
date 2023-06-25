@@ -333,11 +333,15 @@ fn cfg_eval_impl(
         ),
     ));
 
-    Ok(quote_spanned!(span=>
+    let attrs_to_add = quote_spanned!(span=>
         #[::core::prelude::v1::derive(
             #krate::ඞRemoveExterminate
         )]
         #[#krate::ඞdalek_exterminate]
+    );
+
+    Ok(quote_spanned!(Span::mixed_site()=>
+        #attrs_to_add
         #input
     ))
 }

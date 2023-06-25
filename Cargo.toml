@@ -7,12 +7,12 @@ name = "cfg_eval"
 authors = [
     "Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>",
 ]
-version = "0.1.0-rc1"
+version = "0.1.0-rc2"
 edition = "2021"
 rust-version = "1.61.0"
 
 license = "Zlib OR MIT OR Apache-2.0"
-repository = "https://github.com/danielhenrymantilla/cfg-eval.rs"
+repository = "https://github.com/danielhenrymantilla/cfg_eval.rs"
 documentation = "https://docs.rs/cfg_eval"
 readme = "README.md"
 

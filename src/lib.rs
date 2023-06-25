@@ -32,8 +32,10 @@ use ::syn::{*,
 /// https://doc.rust-lang.org/1.70.0/core/prelude/v1/attr.cfg_eval.html)
 /// in stable Rust.
 ///
-///   - Note: this macro only works on `struct`, `enum`, and `union`
-///     definitions (_i.e._, on `#[derive]` input).
+///   - Note: this macro, by default, only works on `struct`, `enum`, and
+///     `union` definitions (_i.e._, on `#[derive]` input).
+///
+///     Enable `features = ["items"]` to get support for arbitary items.
 ///
 /// ## Example
 ///
